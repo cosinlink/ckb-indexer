@@ -12,13 +12,13 @@ fn main() {
         .arg(
             Arg::with_name("ckb_uri")
                 .short("c")
-                .help("CKB rpc http service uri, default 127.0.0.1:8114")
+                .help("CKB rpc http service uri, default 0.0.0.0:8114")
                 .takes_value(true),
         )
         .arg(
             Arg::with_name("listen_uri")
                 .short("l")
-                .help("Indexer rpc http service listen address, default 127.0.0.1:8116")
+                .help("Indexer rpc http service listen address, default 0.0.0.0:8116")
                 .takes_value(true),
         )
         .arg(
@@ -32,7 +32,7 @@ fn main() {
 
     let service = Service::new(
         matches.value_of("store_path").expect("required arg"),
-        matches.value_of("listen_uri").unwrap_or("127.0.0.1:8116"),
+        matches.value_of("listen_uri").unwrap_or("0.0.0.0:8116"),
         std::time::Duration::from_secs(2),
     );
     let rpc_server = service.start();
@@ -40,7 +40,7 @@ fn main() {
     rt::run(rt::lazy(move || {
         let uri = format!(
             "http://{}",
-            matches.value_of("ckb_uri").unwrap_or("127.0.0.1:8114")
+            matches.value_of("ckb_uri").unwrap_or("0.0.0.0:8114")
         );
 
         http::connect(&uri)
